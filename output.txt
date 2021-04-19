@@ -1,0 +1,69 @@
+mat[ILS][USD] => 0.3003
+mat[USD][ILS] => 3.33
+mat[cm][km] => 1e-05
+mat[cm][m] => 0.01
+mat[g][kg] => 0.001
+mat[g][ton] => 1e-06
+mat[hour][min] => 60
+mat[hour][sec] => 3600
+mat[kg][g] => 1000
+mat[kg][ton] => 0.001
+mat[km][cm] => 100000
+mat[km][m] => 1000
+mat[m][cm] => 100
+mat[m][km] => 0.001
+mat[min][hour] => 0.0166667
+mat[min][sec] => 60
+mat[sec][hour] => 0.000277778
+mat[sec][min] => 0.0166667
+mat[ton][g] => 1e+06
+mat[ton][kg] => 1000
+a = 2[km]
+b = 500[m]
+
+check to the operator -
+1.5[km]
+-0.5[km]
+2.5[km]
+-2.5[km]
+
+check to the operator +
+2.5[km]
+4.5[km]
+6.5[km]
+6.5[km]
+
+check to the operator *
+1[km]
+2[km]
+4[km]
+
+check to the operator /
+4[km]
+2[km]
+1[km]
+
+check to the operator +=
+2[km]
+4[km]
+6[km]
+4[km]
+
+check to the operator -=
+2[km]
+0[km]
+-2[km]
+-4[km]
+
+check to the operator *=
+2[km]
+4[km]
+8[km]
+16[km]
+
+check to the operator /=
+2[km]
+1[km]
+0.5[km]
+0.25[km]
+
