@@ -1,19 +1,11 @@
 /**
-  * Number With Units
+  * Number With Units implementaion
   * Create a Number With Units
   * CPP course, Ariel University
   * Created by: Moti Dahari
   * https://github.com/motidahari
   */
 
-
-/*
-טוב ראיתי עכשיו את התרגול של חירות שוב לגבי הfriend והיא אמרה שם ככה:
-אם זה פונקציות שלא משנות את האובייקט/ים - זה נתון לבחירה שלנו אם לעשות friend או לא.
-אם זה פעולות של השמה - זה חייב להיות מתודה רגילה ולא friend
-פונקציות של קלט ופלט - חייבות להיות friend
-אם מישהו רוצה היא מדברת על זה בתרדול של רביעי ב9 בדקה 17 בערך
-*/
 #include <map>
 #include <string>
 #include <iostream>
@@ -24,41 +16,92 @@
 #include "NumberWithUnits.hpp"
 
 using namespace std;
-// string readFileIntoString2(const ifstream& units_file) {
-//     auto ss = ostringstream{};
-//     if (!units_file.is_open()) {
-//         cerr << "Could not open the file - '" << "'" << endl;
-//         exit(EXIT_FAILURE);
-//     }
-//     ss << units_file.rdbuf();
-//     return ss.str();
-// }
+constexpr double BOAZ = 0.000000001;
+
+
+/**
+ * readFileIntoString - A function that reads from a text file and returns a string that represents what is written in the file
+ * @param: units_file - ifstream with path of the file
+ * @return: str - A string of that represents what is written in the file
+*/
+string readFileIntoString(const ifstream& units_file) {
+    auto ss = ostringstream{};
+    if (!units_file.is_open()) {
+        cerr << "Could not open the file - '" << "'" << endl;
+        exit(EXIT_FAILURE);
+    }
+    ss << units_file.rdbuf();
+    return ss.str();
+}
+
 
 namespace ariel {
-    static map<string, map<string, double>> mat;
-
-    void prinMap(){
-        for (const auto &i : mat) {
-          for (const auto &j : mat[i.first]) {
-            std::cout <<"mat["<< i.first << "][" << j.first << "] => " << j.second << endl;
-          }
+    map<string, map<string, double>> mat;
+    /**
+     * printMap - A function that prints all the conversions that exist within the map
+    */
+    void printMap(){
+      for (const auto &i : mat) {
+        for (const auto &j : mat[i.first]) {
+          std::cout <<"mat["<< i.first << "][" << j.first << "] => " << j.second << endl;
         }
+      }
     }
-    void prinInMap(const string nameUnit){
-          for (const auto &j : mat[nameUnit]) {
-            std::cout <<"mat["<< nameUnit <<"][" << j.first << "] => " << j.second << endl;
-        }
+
+    /**
+     * printInMap - A function that prints all the conversions that exist within the map with the specfied measure unit
+     * @param: nameUnit - specfied measure unit in the map
+    */
+    void printInMap(const string& nameUnit){
+      const string& str = nameUnit;
+      for (const auto &j : mat[str]) {
+        std::cout <<"mat["<< str <<"][" << j.first << "] => " << j.second << endl;
+      }
     }    
 
-    double convertUnit1ToUnit2(const string unit1, const string unit2, const double val){
-      if(unit1 == unit2) return val;
+    /**
+     * convertUnit1ToUnit2 - A function that converts from unit 1 to unit 2, if it is not possible to convert to unit we will return a throw
+     * @param: unit1 - A string that represents our unit 1
+     * @param: unit2 - A string that represents our unit 2
+     * @param: val - The value assigned to convert to another unit
+     * @return: double - A number representing the converted measure
+    */
+    double convertUnit1ToUnit2(const string& unit1, const string& unit2, const double val){
+      if(unit1 == unit2) {return val;}
       try{
         return mat.at(unit1).at(unit2) * val;
       }catch(const std::exception& e){
         throw invalid_argument{"Error: Conversion Error - Unable to convert from "+ unit1 +" to "+ unit2};
       }
     }
-    void addMoreUnits(const string nameUnit1, const string nameUnit2){
+
+    /**
+     * compareForUnits - function for comparing 2 different object units, the function converts the second object to the first object unit measurement 
+     * @param: nu1 - the first object of the unit
+     * @param: nu2 - the second object of the unit
+     * @return: 1 - if first object bigger then second object, -1 - if first object smaller then second object, Otherwise returns 0 
+     * */
+    int compareForUnits(const NumberWithUnits& nu1, const NumberWithUnits& nu2){
+      // cout << "\nnu1 => "<< convertUnit1ToUnit2(nu1.unit,nu2.unit, nu1.unitAmount) << "["<<nu2.unit <<"]\n";
+      // cout << "\nnu2 => "<< convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit <<"]\n";
+      double unit2 = convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
+      return (nu1.unitAmount > unit2) ? 1 : (nu1.unitAmount < unit2)? -1 : 0;
+    }
+
+    /**
+     * addMoreUnits - A function that adds measures of transcendence, 
+     * the function run on the map at unit1 location and adds the measure of the grandchild with the grandfather.
+     * For example:
+     *  If in the file we received it says:
+                  1 km = 1000 m
+                  1 m = 100 cm
+                  then the convertion: km -> cm || cm -> km is added.
+
+     * @param: nameUnit1 - the first object of the unit
+     * @param: nameUnit2 - the second object of the unit
+     * @return: 1 - if first object bigger then second object, -1 - if first object smaller then second object, Otherwise returns 0 
+     * */
+    void addMoreUnits(const string& nameUnit1, const string& nameUnit2){
       for (const auto &x : mat[nameUnit1]) {
         if(x.first != nameUnit2){
           // cout << "[" << x.first << "] -> " << x.second << endl;
@@ -69,9 +112,16 @@ namespace ariel {
         }
       }
     }  
-    static void read_units(ifstream& units_file){
-      string nameUnit1,nameUnit2,operEqual;
-      double num1, num2;
+
+    /**
+     * read_units - The function run on file and add the conversions into the map
+     * @param: units_file - ifstream with path of the file
+     * */   
+    void NumberWithUnits::read_units(ifstream& units_file){
+      string nameUnit1;
+      string nameUnit2;
+      string operEqual;
+      double num1 = BOAZ; double num2 = BOAZ;
       while (units_file >> num1 >> nameUnit1 >> operEqual >> num2 >> nameUnit2){
         if(num1 == 1 && operEqual == "=" && num2 > 0){
           // cout << num1 << " " << nameUnit1 << " " << operEqual << " " << num2 << " " << nameUnit2 << endl;
@@ -79,14 +129,22 @@ namespace ariel {
           mat[nameUnit1][nameUnit2] = num2;
           addMoreUnits(nameUnit1,nameUnit2);
           addMoreUnits(nameUnit2,nameUnit1);
+          // addMoreUnits(nameUnit2,nameUnit1);
         }else{
           throw invalid_argument{"Error: Unit conversion file is invalid\n"};
         }
       }
       // cout << "\n";
-      prinMap(); 
+      // printMap(); 
     }
-    ostream& operator<< (ostream& os , const NumberWithUnits& nu){
+
+
+   /**
+   * Overloading the operator IO 
+   * cout << a;
+   * cin >> a;
+   * */ 
+    ostream& operator<<(ostream& os , const NumberWithUnits& nu){
         os << nu.unitAmount << "[" << nu.unit << "]";
         return os;
     }
@@ -95,344 +153,320 @@ namespace ariel {
       is >> nu.unitAmount >> str >> nu.unit;
       return is;
     }
-    
-  /**
+
+   /**
    * Overloading  the operator -
    * a - b
    * a - 5
    * 5 - a
-   * - a 
+   * (-a) 
    * */ 
     NumberWithUnits operator-(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " - (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
       return NumberWithUnits(nu1.unitAmount - convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount),nu1.unit);
     }
     NumberWithUnits operator-(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " - (" << num << "[" << nu1.unit << "]) = ";
       return NumberWithUnits(nu1.unitAmount - num, nu1.unit);
     }
     NumberWithUnits operator-(const double num , const NumberWithUnits& nu1){
+      // cout << num << "[" << nu1.unit  << "] - (" << nu1  << ") = ";
       return NumberWithUnits(num - nu1.unitAmount, nu1.unit);
     }
     NumberWithUnits operator-(const NumberWithUnits& nu1){
+      // cout << "(-" << nu1 << ") = ";
       return NumberWithUnits(-nu1.unitAmount, nu1.unit);
     }
-  /**
-   * Overloading the operator +
-   * a + b
-   * a + 5
-   * 5 + a
-   * + a 
-   * */ 
+
+    /**
+     * Overloading the operator +
+     * a + b
+     * a + 5
+     * 5 + a
+     * (+a) 
+     * */ 
     NumberWithUnits operator+(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " + (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
       return NumberWithUnits(nu1.unitAmount + convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount),nu1.unit);
     }
     NumberWithUnits operator+(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " + (" << num << "[" << nu1.unit << "]) = ";
       return NumberWithUnits(nu1.unitAmount + num, nu1.unit);
     }
     NumberWithUnits operator+(const double num , const NumberWithUnits& nu1){
+      // cout << num  << "[" << nu1.unit  << "] + (" << nu1  << ") = ";
       return NumberWithUnits(num + nu1.unitAmount, nu1.unit);
     }
     NumberWithUnits operator+(const NumberWithUnits& nu1){
-      return NumberWithUnits(+nu1.unitAmount, nu1.unit);
+      // cout << "(+" << nu1 << ") = ";
+      return NumberWithUnits(nu1.unitAmount, nu1.unit);
     }
 
-
-  /**
-   * Overloading the operator *
-   * a * b
-   * a * 5
-   * 5 * a
-   * */ 
-
+    /**
+     * Overloading the operator *
+     * a * b
+     * a * 5
+     * 5 * a
+     * */ 
     NumberWithUnits operator*(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " * (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
       return NumberWithUnits(nu1.unitAmount * convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount),nu1.unit);
     }
     NumberWithUnits operator*(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " * (" << num << "[" << nu1.unit << "]) = ";
       return NumberWithUnits(nu1.unitAmount * num, nu1.unit);
     }
     NumberWithUnits operator*(const double num , const NumberWithUnits& nu1){
+      // cout << num  << "[" << nu1.unit  << "] * (" << nu1  << ") = ";
       return NumberWithUnits(num * nu1.unitAmount, nu1.unit);
     }
 
-
-  /**
-   * Overloading the operator /
-   * a / b
-   * a / 5
-   * 5 / a
-   * */ 
-
-    NumberWithUnits operator/(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
-      return NumberWithUnits(nu1.unitAmount / convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount),nu1.unit);
-    }
-    NumberWithUnits operator/(const NumberWithUnits& nu1 , const double num){
-      return NumberWithUnits(nu1.unitAmount / num, nu1.unit);
-    }
-    NumberWithUnits operator/(const double num , const NumberWithUnits& nu1){
-      return NumberWithUnits(num / nu1.unitAmount, nu1.unit);
-    }
-
-  /**
-   * Overloading the operators with = that not check equals
-   * a += b
-   * a += 5
-   * 5 += a
-   * a -= b
-   * a -= 5
-   * 5 -= a
-   * a *= b
-   * a *= 5
-   * 5 *= a
-   * a /= b
-   * a /= 5
-   * 5 /= a
-   * */ 
-
-
-  
-
+    /**
+     * Overloading the operators with = that not check equals
+     * a += b
+     * a += 5
+     * 5 += a
+     * */
     NumberWithUnits operator+=(NumberWithUnits& nu1 , const NumberWithUnits& nu2){
-      nu1.unitAmount +=  convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
+      // cout << nu1 << " += (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
+      nu1.unitAmount += convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
       return nu1;
     }
     NumberWithUnits operator+=(NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " += (" << num << "[" << nu1.unit << "]) = "; 
       nu1.unitAmount += num;
       return nu1;
     }
     NumberWithUnits operator+=(const double num , NumberWithUnits& nu1){
-      nu1.unitAmount -= num;
+      // cout << num  << "[" << nu1.unit  << "] += (" << nu1  << ") = ";
+      nu1.unitAmount += num;
       return nu1;
     }
 
-
-
-
+    /**
+     * Overloading the operators with = that not check equals
+     * a -= b
+     * a -= 5
+     * 5 -= a
+     * */ 
     NumberWithUnits operator-=(NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " -= (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
       nu1.unitAmount -= convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
       return nu1;
     }
     NumberWithUnits operator-=(NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " -= (" << num << "[" << nu1.unit << "]) = "; 
       nu1.unitAmount -= num;
       return nu1;
     }
     NumberWithUnits operator-=(const double num , NumberWithUnits& nu1){
-      nu1.unitAmount -= num;
+      // cout << num  << "[" << nu1.unit  << "] -= (" << nu1  << ") = ";
+      nu1.unitAmount = -nu1.unitAmount + num;
       return nu1;
     }
 
-
-
-
+    /**
+     * Overloading the operators with = that not check equals
+     * a *= b
+     * a *= 5
+     * 5 *= a
+     * */ 
     NumberWithUnits operator*=(NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " *= (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
       nu1.unitAmount *= convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
       return nu1;
     }
     NumberWithUnits operator*=(NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " *= (" << num << "[" << nu1.unit << "]) = "; 
       nu1.unitAmount *= num;
       return nu1;
     }
     NumberWithUnits operator*=(const double num , NumberWithUnits& nu1){
+      // cout << num  << "[" << nu1.unit  << "] *= (" << nu1  << ") = ";
       nu1.unitAmount *= num;
       return nu1;
     }
 
-
-
-
+    /**
+     * Overloading the operators with = that not check equals
+     * a /= b
+     * a /= 5
+     * 5 /= a
+     * */ 
     NumberWithUnits operator/=(NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " /= (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
       nu1.unitAmount /= convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
       return nu1;
     }
     NumberWithUnits operator/=(NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " /= (" << num << "[" << nu1.unit << "]) = "; 
       nu1.unitAmount /= num;
       return nu1;
     }
     NumberWithUnits operator/=(const double num , NumberWithUnits& nu1){
-      nu1.unitAmount /= num;
+      // cout << num  << "[" << nu1.unit  << "] /= (" << nu1  << ") = ";
+      nu1.unitAmount = nu1.unitAmount/num;
       return nu1;
     }
- 
+
+    /**
+     * Overloading the operator /
+     * a / b
+     * a / 5
+     * 5 / a
+     * */ 
+    NumberWithUnits operator/(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " / (" << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit << "]) = ";
+      return NumberWithUnits(nu1.unitAmount / convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount),nu1.unit);
+    }
+    NumberWithUnits operator/(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " / (" << num << "[" << nu1.unit << "]) = ";
+      return NumberWithUnits(nu1.unitAmount / num, nu1.unit);
+    }
+    NumberWithUnits operator/(const double num , const NumberWithUnits& nu1){
+      // cout << num  << "[" << nu1.unit  << "] / (" << nu1  << ") = ";
+      return NumberWithUnits(num / nu1.unitAmount, nu1.unit);
+    }
+
+    /**
+     * Overloading the operators that check equals
+     * a == b
+     * a == 5
+     * 5 == a
+     * */ 
+    bool operator==(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " == " << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "[" << nu1.unit <<"] = ";
+      return compareForUnits(nu1,nu2) == 0;
+    }
+    bool operator==(const double num, const NumberWithUnits& nu1){
+      // cout << nu1 << " == " << num << "[" << nu1.unit << "] = ";
+      return compareForUnits(nu1, NumberWithUnits(num , nu1.unit)) == 0;
+    }
+    bool operator==(const NumberWithUnits& nu1 , const double num){
+      // cout << num << "[" << nu1.unit << "] == "  << nu1 << " = " ;
+      return compareForUnits(nu1, NumberWithUnits(num , nu1.unit)) == 0;
+    }
+
+    /**
+     * Overloading the operators that check equals
+     * a < b
+     * a < 5
+     * 5 < a
+     * */ 
+    bool operator<(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " < " << nu2 << " = ";
+      return compareForUnits(nu1,nu2) == -1;
+    }
+    bool operator<(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " < " << num << "[" << nu1.unit << "] = ";
+      return compareForUnits(nu1, NumberWithUnits(num,nu1.unit)) == -1;
+    }
+    bool operator<(const double num, const NumberWithUnits& nu1){
+      // cout << num << "[" << nu1.unit << "] < "  << nu1 << " = " ;
+      return compareForUnits(NumberWithUnits(num,nu1.unit), nu1) == -1;
+    }
+
+    /**
+     * Overloading the operators that check equals
+     * a > b
+     * a > 5
+     * 5 > a
+     * */ 
+    bool operator>(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " > " << nu2 << " = ";
+      return compareForUnits(nu1,nu2) == 1;
+    }
+    bool operator>(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " > " << num << "[" << nu1.unit << "] = ";
+      return compareForUnits(nu1, NumberWithUnits(num,nu1.unit)) == 1;
+    }
+    bool operator>(const double num, const NumberWithUnits& nu1){
+      // cout << num << "[" << nu1.unit << "] > "  << nu1 << " = " ;
+      return compareForUnits(NumberWithUnits(num,nu1.unit), nu1) == 1;
+    }
+
+    /**
+     * Overloading the operators that check equals
+     * a >= b
+     * a >= 5
+     * 5 >= a
+     * */
+    bool operator>=(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " >= " << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "[" << nu1.unit <<"] = ";
+      return compareForUnits(nu1,nu2) >= 0;
+    }
+    bool operator>=(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " >= " << num << "[" << nu1.unit << "] = ";
+      return compareForUnits(nu1,NumberWithUnits{num,nu1.unit}) >= 0;
+    }
+    bool operator>=(const double num , const NumberWithUnits& nu1){
+      // cout << num << "[" << nu1.unit << "] >= "  << nu1 << " = " ;
+      return compareForUnits(NumberWithUnits{num,nu1.unit},nu1) >= 0;
+    }
+
+    /**
+     * Overloading the operators that check equals
+     * a <= b
+     * a <= 5
+     * 5 <= a
+     * */ 
+    bool operator<=(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+      // cout << nu1 << " <= " << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "[" << nu1.unit <<"] = ";
+      return compareForUnits(nu1,nu2) <= 0;
+    }
+    bool operator<=(const NumberWithUnits& nu1 , const double num){
+      // cout << nu1 << " <= " << num << "[" << nu1.unit << "] = ";
+      return compareForUnits(nu1,NumberWithUnits{num,nu1.unit}) <= 0;
+    }
+    bool operator<=(const double num , const NumberWithUnits& nu1){
+      // cout << num << "[" << nu1.unit << "] <= "  << nu1 << " = " ;
+      return compareForUnits(NumberWithUnits{num,nu1.unit},nu1) <= 0;
+    }
+
+    /**
+     * Overloading the operators that check equals
+     * a <= b
+     * a <= 5
+     * 5 <= a
+     * */ 
+    bool operator!=(const NumberWithUnits& nu1 , const NumberWithUnits& nu2){
+        // cout << nu1 << " != " << convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "[" << nu1.unit <<"] = ";
+        return compareForUnits(nu1,nu2) != 0;
+    }
+    bool operator!=(const NumberWithUnits& nu1 , const double num){
+        // cout << nu1 << " != " << num << "[" << nu1.unit << "] = ";
+        return compareForUnits(nu1, NumberWithUnits(num , nu1.unit)) != 0;
+    }
+    bool operator!=(const double num , const NumberWithUnits& nu1){
+        // cout << num << "[" << nu1.unit << "] != "  << nu1 << " = " ;
+        return compareForUnits(nu1, NumberWithUnits(num , nu1.unit)) != 0;
+    }
+
+    /**
+   * Overloading the operators that check equals
+   * a++
+   * ++a
+   * */ 
+    NumberWithUnits operator++(NumberWithUnits& nu1, int){
+      // cout << nu1 << "++ = ";
+      return NumberWithUnits(nu1.unitAmount++, nu1.unit);
+    }
+    NumberWithUnits operator++(NumberWithUnits& nu1){
+      // cout << "++" << nu1 << " = ";
+      return NumberWithUnits(++nu1.unitAmount, nu1.unit);
+    }
+    
+    /**
+   * Overloading the operators that check equals
+   * a--
+   * --a
+   * */ 
+    NumberWithUnits operator--(NumberWithUnits& nu1, int){
+      // cout << nu1 << "-- = ";
+      return NumberWithUnits(nu1.unitAmount--, nu1.unit);
+    }
+    NumberWithUnits operator--(NumberWithUnits& nu1){
+      // cout << "--" << nu1 << " = ";
+      return NumberWithUnits(--nu1.unitAmount, nu1.unit);
+    }
 };
-
-int main(){
-  ifstream units_file{"units.txt"};
-  ariel::read_units(units_file);
-
-  ariel::NumberWithUnits a{2, "km"};
-  ariel::NumberWithUnits b{500, "m"};
-  cout << "a = " << a << "\n";
-  cout << "b = " << b << "\n\n";
-/*
-  check to the operator -
-
-  The output should be{
-    1.5[km]
-    -0.5[km]
-    2.5[km]
-    -2.5[km]
-  }  
-  */
-  ariel::NumberWithUnits c = a - b;
-  cout << "check to the operator -" << "\n";
-  cout << c << "\n";
-  c = c-2;
-  cout << c << "\n";
-  c = 2 - c;
-  cout << c << "\n";
-  cout << -c << "\n\n";
-  
-/*
-  check to the operator +
-
-  The output should be{
-    2.5[km]
-    4.5[km]
-    6.5[km]
-    6.5[km] 
-  }  
-  */
-  cout << "check to the operator +" << "\n";
-  c = a + b;
-  cout << c << "\n";
-  c = c + 2;
-  cout << c << "\n";
-  c = 2 + c;
-  cout << c << "\n";
-  cout << + c << "\n\n";
-
-/*
-  check to the operator *
-
-  The output should be{
-    1[km]
-    2[km]
-    4[km]
-  }  
-  */
-  cout << "check to the operator *" << "\n";
-  c = a * b;
-  cout << c << "\n";
-  c = c * 2;
-  cout << c << "\n";
-  c = 2 * c;
-  cout << c << "\n\n";
-
-/*
-  check to the operator /
-
-  The output should be{
-    4[km]
-    2[km]
-    1[km]
-  }  
-  */
-  cout << "check to the operator /" << "\n";
-  c = a / b;
-  cout << c << "\n";
-  c = c / 2;
-  cout << c << "\n";
-  c = 2 / c;
-  cout << c << "\n\n";
-
-/*
-  check to the operator +=
-
-  The output should be{
-    2[km]
-    4[km]
-    6[km]
-    4[km]
-  }
-  */
-  cout << "check to the operator +=" << "\n";
-  c = a ;
-  cout << c << "\n";
-  c += c;
-  cout << c << "\n";
-  c += 2;
-  cout << c << "\n";
-  2 += c;
-  cout << c << "\n\n";
-
-/*
-  check to the operator -=
-
-  The output should be{
-    2[km]
-    0[km]
-    -2[km]
-    -4[km]
-  }
-  */
-  cout << "check to the operator -=" << "\n";
-  c = a ;
-  cout << c << "\n";
-  c -= c;
-  cout << c << "\n";
-  c -= 2;
-  cout << c << "\n";
-  2 -= c;
-  cout << c << "\n\n";
-
-/*
-  check to the operator *=
-
-  The output should be{
-    2[km]
-    4[km]
-    8[km]
-    16[km]
-  }
- */
-  cout << "check to the operator *=" << "\n";
-  c = a ;
-  cout << c << "\n";
-  c *= c;
-  cout << c << "\n";
-  c *= 2;
-  cout << c << "\n";
-  2 *= c;
-  cout << c << "\n\n";
-
-/*
-  check to the operator /=
-
-  The output should be{
-    2[km]
-    1[km]
-    0.5[km]
-    0.25[km]
-  }
-*/
-  cout << "check to the operator /=" << "\n";
-  c = a ;
-  cout << c << "\n";
-  c /= c;
-  cout << c << "\n";
-  c /= 2;
-  cout << c << "\n";
-  2 /= c;
-  cout << c << "\n\n";
-
-
-  //check cout
-  /*
-  cout << a << endl;
-  cout << b << endl;
-  cout << (ariel::mat["km"]["cm"] * 5) << endl;
-  cout << (ariel::mat["cm"]["km"] ) * 500000 << endl;
-  */
-
-
-  //check convert
-   /*
-  cout << ariel::convertUnit1ToUnit2("km", "cm", 5) << "\n";
-  cout << ariel::convertUnit1ToUnit2("km", "m", 5) << "\n";
-  cout << ariel::convertUnit1ToUnit2("m", "cm", 1) << "\n";
-  */
-
-  return 0;
-}
-
-/*
-clear && clang-9 -o run NumberWithUnits.cpp -lstdc++ && ./run
-*/
