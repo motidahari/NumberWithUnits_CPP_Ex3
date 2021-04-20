@@ -298,3 +298,28 @@ TEST_CASE("test for the operator --"){
     CHECK_EQ( --a , NumberWithUnits{2, "km"});
     CHECK_EQ( a , NumberWithUnits{2, "km"});
 }
+
+
+/**
+ * Test for the input/output
+ */
+TEST_CASE("Test for the input/output"){
+  NumberWithUnits::read_units(units_file);
+
+  //cin
+  istringstream input1 {"7000 [ kg ]"};
+  istringstream input2 {"10000 [ kg ]"};
+  input1 >> a;
+  input2 >> b;
+  CHECK_EQ(a , NumberWithUnits{7000, "kg"});
+  CHECK_EQ(b , NumberWithUnits{10000, "kg"});
+  CHECK_EQ(a += b , NumberWithUnits{17000, "kg"});
+  
+  //cout
+  ostringstream d;
+  ostringstream e;
+  d << a;
+  e << b;
+  CHECK_EQ(d.str() , "17000[kg]");
+  CHECK_EQ(e.str() , "10000[kg]");
+}

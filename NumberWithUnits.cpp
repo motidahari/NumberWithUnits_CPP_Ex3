@@ -71,7 +71,9 @@ namespace ariel {
       try{
         return mat.at(unit1).at(unit2) * val;
       }catch(const std::exception& e){
-        throw invalid_argument{"Error: Conversion Error - Unable to convert from "+ unit1 +" to "+ unit2};
+        
+        throw invalid_argument{"Prints Units do not match - ["+unit1+"] cannot be converted to ["+unit2+"]"};
+        // throw invalid_argument{"Error: Conversion Error - Unable to convert from "+ unit1 +" to "+ unit2};
       }
     }
 

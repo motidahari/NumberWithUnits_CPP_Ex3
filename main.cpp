@@ -378,11 +378,11 @@ int main(){
   cout << "(--a) = " << --a << "\n";
   cout << "a = " << a << "\n\n";
 
-  // istringstream sample_input{"700 [ kg ]"};
-  // sample_input >> a;
-  // cout << a << endl;   // Prints "700[kg]"
-  // cout << (a += ariel::NumberWithUnits{1, "ton"}) << endl;  // prints "1700[kg]"
-  // cout << a << endl;   // Prints "1700[kg]". Note that a has changed.
+  istringstream sample_input{"700 [ kg ]"};
+  sample_input >> a;
+  cout << a << endl;   // Prints "700[kg]"
+  cout << (a += ariel::NumberWithUnits{1, "ton"}) << endl;  // prints "1700[kg]"
+  cout << a << endl;   // Prints "1700[kg]". Note that a has changed.
 
 
   return 0;
