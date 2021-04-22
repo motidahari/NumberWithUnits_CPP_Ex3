@@ -1,0 +1,13 @@
+2[km]
+(-2[km]) = -2[km]
+3[km] * (2[km]) = 6[km]
+2[km] + (0.3[km]) = 2.3[km]
+300[m] - (2000[m]) = -1700[m]
+2[km] > 300[m] = true
+2[km] <= 0.3[km] = false
+2[km] == 2[km] = true
+700[kg]
+700[kg] += (1000[kg]) = 1700[kg]
+1700[kg]
+1700[kg] + (Units do not match - [m] cannot be converted to [kg]
+End of demo!

@@ -1,141 +1,123 @@
 
-mat[ILS][USD] => 0.3003
-mat[USD][ILS] => 3.33
-mat[cm][km] => 1e-05
-mat[cm][m] => 0.01
-mat[g][kg] => 0.001
-mat[g][ton] => 1e-06
-mat[hour][min] => 60
-mat[hour][sec] => 3600
-mat[kg][g] => 1000
-mat[kg][ton] => 0.001
-mat[km][cm] => 100000
-mat[km][m] => 1000
-mat[m][cm] => 100
-mat[m][km] => 0.001
-mat[min][hour] => 0.0166667
-mat[min][sec] => 60
-mat[sec][hour] => 0.000277778
-mat[sec][min] => 0.0166667
-mat[ton][g] => 1e+06
-mat[ton][kg] => 1000
-
 
 a = 2[km]
 b = 500[m]
 
 check to the operator -
-a-b = 1.5[km]
-c-2 = -0.5[km]
-2-c = 2.5[km]
-2-(-c) = 4.5[km]
-(-c) - 2 = -6.5[km]
-(-c) = 6.5[km]
+2[km] - (0.5[km]) = a-b = 1.5[km]
+1.5[km] - (2[km]) = c-2 = -0.5[km]
+2[km] - (-0.5[km]) = 2-c = 2.5[km]
+(-2.5[km]) = 2[km] - (-2.5[km]) = 2-(-c) = 4.5[km]
+(-4.5[km]) = -4.5[km] - (2[km]) = (-c) - 2 = -6.5[km]
+(-c) = (--6.5[km]) = 6.5[km]
 
 check to the operator +
-a+b = 2.5[km]
-c+2 = 4.5[km]
-2+c = 6.5[km]
-2+(+c) = 8.5[km]
-(+c) = 8.5[km]
+2[km] + (0.5[km]) = a+b = 2.5[km]
+2.5[km] + (2[km]) = c+2 = 4.5[km]
+2[km] + (4.5[km]) = 2+c = 6.5[km]
+(+6.5[km]) = 2[km] + (6.5[km]) = 2+(+c) = 8.5[km]
+(+c) = (+8.5[km]) = 8.5[km]
 
 check to the operator *
-a*b = 1[km]
-c*2 = 2[km]
-2*c = 4[km]
-2*(c) = 8[km]
+2[km] * (0.5[km]) = a*b = 1[km]
+1[km] * (2[km]) = c*2 = 2[km]
+2[km] * (2[km]) = 2*c = 4[km]
+2[km] * (4[km]) = 2*(c) = 8[km]
 
 check to the operator /
-a/b = 4[km]
-c/2 = 2[km]
-2/c = 1[km]
-2/(c) = 2[km]
+2[km] / (0.5[km]) = a/b = 4[km]
+4[km] / (2[km]) = c/2 = 2[km]
+2[km] / (2[km]) = 2/c = 1[km]
+2[km] / (1[km]) = 2/(c) = 2[km]
 
 check to the operator +=
-c+=a = 4[km]
-c+=2 = 6[km]
-2+=c = 8[km]
+2[km] += (2[km]) = c+=a = 4[km]
+4[km] += (2[km]) = c+=2 = 6[km]
+2[km] += (6[km]) = 2+=c = 8[km]
 
 check to the operator -=
-c-=a = 6[km]
-c-=2 = 4[km]
-2-=c = -2[km]
+8[km] -= (2[km]) = c-=a = 6[km]
+6[km] -= (2[km]) = c-=2 = 4[km]
+2[km] -= (4[km]) = 2-=c = -2[km]
 
 check to the operator *=
-c*=a = -4[km]
-c*=2 = -8[km]
-2*=c = -16[km]
+-2[km] *= (2[km]) = c*=a = -4[km]
+-4[km] *= (2[km]) = c*=2 = -8[km]
+2[km] *= (-8[km]) = 2*=c = -16[km]
 
 check to the operator /=
-c/=a = -8[km]
-c/=2 = -4[km]
-2/=c = -2[km]
+-16[km] /= (2[km]) = c/=a = -8[km]
+-8[km] /= (2[km]) = c/=2 = -4[km]
+2[km] /= (-4[km]) = 2/=c = -2[km]
 
 check to the operator ==
-(a == b) = 0
-(b == a) = 0
-(b == b) = 1
-(a == a) = 1
-(a == 2) = 1
-(2 == a) = 1
+(a == b) = 2[km] == 0.5[km] = 0
+(b == a) = 500[m] == 2000[m] = 0
+(b == b) = 500[m] == 500[m] = 1
+(a == a) = 2[km] == 2[km] = 1
+(a == 2) = 2[km] == 2[km] = 1
+(2 == a) = 2[km] == 2[km] = 1
 
 check to the operator < 
-(a < b) = 0
-(b < a) = 1
-(b < b) = 0
-(a < a) = 0
-(a < 2) = 0
-(2 < a) = 0
-(1 < a) = 1
-(a < 4) = 1
+(a < b) = 2[km] < 500[m] = 0
+(b < a) = 500[m] < 2[km] = 1
+(b < b) = 500[m] < 500[m] = 0
+(a < a) = 2[km] < 2[km] = 0
+(a < 2) = 2[km] < 2[km] = 0
+(2 < a) = 2[km] < 2[km] = 0
+(1 < a) = 1[km] < 2[km] = 1
+(a < 4) = 2[km] < 4[km] = 1
 
 check to the operator > 
-(a > b) = 1
-(b > a) = 0
-(b > b) = 0
-(a > a) = 0
-(a > 2) = 0
-(2 > a) = 0
-(1 > a) = 0
-(a > 4) = 0
+(a > b) = 2[km] > 500[m] = 1
+(b > a) = 500[m] > 2[km] = 0
+(b > b) = 500[m] > 500[m] = 0
+(a > a) = 2[km] > 2[km] = 0
+(a > 2) = 2[km] > 2[km] = 0
+(2 > a) = 2[km] > 2[km] = 0
+(1 > a) = 1[km] > 2[km] = 0
+(a > 4) = 2[km] > 4[km] = 0
 
 check to the operator >= 
-(a >= b) = 1
-(b >= a) = 0
-(b >= b) = 1
-(a >= a) = 1
-(a >= 2) = 1
-(2 >= a) = 1
-(1 >= a) = 0
-(a >= 4) = 0
+(a >= b) = 2[km] >= 0.5[km] = 1
+(b >= a) = 500[m] >= 2000[m] = 0
+(b >= b) = 500[m] >= 500[m] = 1
+(a >= a) = 2[km] >= 2[km] = 1
+(a >= 2) = 2[km] >= 2[km] = 1
+(2 >= a) = 2[km] >= 2[km] = 1
+(1 >= a) = 1[km] >= 2[km] = 0
+(a >= 4) = 2[km] >= 4[km] = 0
 
 check to the operator <= 
-(a <= b) = 0
-(b <= a) = 1
-(b <= b) = 1
-(a <= a) = 1
-(a <= 2) = 1
-(2 <= a) = 1
-(1 <= a) = 1
-(a <= 4) = 1
+(a <= b) = 2[km] <= 0.5[km] = 0
+(b <= a) = 500[m] <= 2000[m] = 1
+(b <= b) = 500[m] <= 500[m] = 1
+(a <= a) = 2[km] <= 2[km] = 1
+(a <= 2) = 2[km] <= 2[km] = 1
+(2 <= a) = 2[km] <= 2[km] = 1
+(1 <= a) = 1[km] <= 2[km] = 1
+(a <= 4) = 2[km] <= 4[km] = 1
 
 check to the operator !=
-(a != b) = 1
-(b != a) = 1
-(b != b) = 0
-(a != a) = 0
-(a != 2) = 0
-(2 != a) = 0
+(a != b) = 2[km] != 0.5[km] = 1
+(b != a) = 500[m] != 2000[m] = 1
+(b != b) = 500[m] != 500[m] = 0
+(a != a) = 2[km] != 2[km] = 0
+(a != 2) = 2[km] != 2[km] = 0
+(2 != a) = 2[km] != 2[km] = 0
 
 check to the operator ++
-(a++) = 2[km]
+(a++) = 2[km]++ = 2[km]
 a = 3[km]
-(++a) = 4[km]
+(++a) = ++3[km] = 4[km]
 a = 4[km]
 
 check to the operator --
-(a--) = 4[km]
+(a--) = 4[km]-- = 4[km]
 a = 3[km]
-(--a) = 2[km]
+(--a) = --3[km] = 2[km]
 a = 2[km]
 
+700[kg]
+700[kg] += (1000[kg]) = 1700[kg]
+1700[kg]

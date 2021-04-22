@@ -390,4 +390,5 @@ int main(){
 
 /*
 clear && clang-9 -o run main.cpp -lstdc++ && ./run
+clear && clang-9 -o run main.cpp -lstdc++ && ./run > OUTPUT_MAP_AND_TEST.txt
 */

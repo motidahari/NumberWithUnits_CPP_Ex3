@@ -72,7 +72,7 @@ namespace ariel {
         return mat.at(unit1).at(unit2) * val;
       }catch(const std::exception& e){
         
-        throw invalid_argument{"Prints Units do not match - ["+unit1+"] cannot be converted to ["+unit2+"]"};
+        throw invalid_argument{"Units do not match - ["+unit1+"] cannot be converted to ["+unit2+"]"};
         // throw invalid_argument{"Error: Conversion Error - Unable to convert from "+ unit1 +" to "+ unit2};
       }
     }
@@ -86,9 +86,12 @@ namespace ariel {
     int compareForUnits(const NumberWithUnits& nu1, const NumberWithUnits& nu2){
       // cout << "\nnu1 => "<< convertUnit1ToUnit2(nu1.unit,nu2.unit, nu1.unitAmount) << "["<<nu2.unit <<"]\n";
       // cout << "\nnu2 => "<< convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount) << "["<<nu1.unit <<"]\n";
-      double unit2 = convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount);
-      return (nu1.unitAmount > unit2) ? 1 : (nu1.unitAmount < unit2)? -1 : 0;
+      double x1 = abs((nu1.unitAmount+__DBL_EPSILON__) - (convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount)+__DBL_EPSILON__));
+      if(x1 < __DBL_EPSILON__) return 0;
+      double x2 = (nu1.unitAmount+__DBL_EPSILON__) - (convertUnit1ToUnit2(nu2.unit,nu1.unit, nu2.unitAmount)+__DBL_EPSILON__);
+      return (x2 > __DBL_EPSILON__) ? 1 : (-x2 > __DBL_EPSILON__)? -1 : 0;
     }
+
 
     /**
      * addMoreUnits - A function that adds measures of transcendence, 
