@@ -37,10 +37,7 @@ namespace ariel {
        * @param: unitAmount - Number representing unit Amount
        * @param: unit - String representing unit 
       */
-      NumberWithUnits(double unitAmount,string unit){
-          this->unit = unit;
-          this->unitAmount = unitAmount;
-      }
+     NumberWithUnits(const double& ,const string& );
 
       /**
        * destructor - It is destructor used to cleanup the stuff when the object is about to die.
@@ -119,8 +116,10 @@ namespace ariel {
        * a += 5
        * 5 += a
        * */ 
-      friend NumberWithUnits operator+=(NumberWithUnits&  ,const NumberWithUnits&);
-      friend NumberWithUnits operator+=(NumberWithUnits&  , const double);
+
+
+      NumberWithUnits &operator+=(const NumberWithUnits &num);
+      NumberWithUnits &operator+=(const double &num);
       friend NumberWithUnits operator+=(const double , NumberWithUnits&);
               
       /**
@@ -129,19 +128,22 @@ namespace ariel {
        * a -= 5
        * 5 -= a
        * */ 
-      friend NumberWithUnits operator-=(NumberWithUnits&  ,const NumberWithUnits&);
-      friend NumberWithUnits operator-=(NumberWithUnits&  , const double);
+      // friend NumberWithUnits operator-=(NumberWithUnits&  ,const NumberWithUnits&);
+      // friend NumberWithUnits operator-=(NumberWithUnits&  , const double);
       friend NumberWithUnits operator-=(const double , NumberWithUnits&);
-          
+      NumberWithUnits &operator-=(const NumberWithUnits &num);
+      NumberWithUnits &operator-=(const double &num);
       /**
        * Overloading the operators with = that not check equals
        * a *= b
        * a *= 5
        * 5 *= a
        * */ 
-      friend NumberWithUnits operator*=(NumberWithUnits&  ,const NumberWithUnits&);
+      NumberWithUnits &operator*=(const NumberWithUnits &num);
+      NumberWithUnits &operator*=(const double &num);
+      // friend NumberWithUnits operator*=(NumberWithUnits&  ,const NumberWithUnits&);
       friend NumberWithUnits operator*=(const double, NumberWithUnits&);
-      friend NumberWithUnits operator*=(NumberWithUnits&  , const double);
+      // friend NumberWithUnits operator*=(NumberWithUnits&  , const double);
 
       /**
        * Overloading the operators with = that not check equals
@@ -149,8 +151,10 @@ namespace ariel {
        * a /= 5
        * 5 /= a
        * */ 
-      friend NumberWithUnits operator/=(NumberWithUnits&  ,const NumberWithUnits&);
-      friend NumberWithUnits operator/=(NumberWithUnits&  , const double);
+      NumberWithUnits &operator/=(const NumberWithUnits &num);
+      NumberWithUnits &operator/=(const double &num);
+      // friend NumberWithUnits operator/=(NumberWithUnits&  ,const NumberWithUnits&);
+      // friend NumberWithUnits operator/=(NumberWithUnits&  , const double);
       friend NumberWithUnits operator/=(const double, NumberWithUnits&);
 
       /**
@@ -218,15 +222,17 @@ namespace ariel {
        * a++
        * ++a
        * */ 
-      friend NumberWithUnits operator++(NumberWithUnits& , int);
-      friend NumberWithUnits operator++(NumberWithUnits&);
+      NumberWithUnits& operator++();
+      NumberWithUnits operator++(int);
         
       /**
        * Overloading the operators that check equals
        * a--
        * --a
        * */ 
-      friend NumberWithUnits operator--(NumberWithUnits& , int);
-      friend NumberWithUnits operator--(NumberWithUnits&);
+      NumberWithUnits& operator--();
+      NumberWithUnits operator--(int);
+      
+      
   };
 }
