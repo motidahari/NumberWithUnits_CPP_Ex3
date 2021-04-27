@@ -323,3 +323,8 @@ TEST_CASE("Test for the input/output"){
   CHECK_EQ(d.str() , "17000[kg]");
   CHECK_EQ(e.str() , "10000[kg]");
 }
+
+/*
+make demo && ./demo
+make test && ./test
+*/
