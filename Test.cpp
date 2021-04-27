@@ -55,9 +55,9 @@ TEST_CASE("test for the operator -"){
 TEST_CASE("test for the operator +"){
     NumberWithUnits::read_units(units_file);
 
-    c = a - b;
-    CHECK_EQ(c , NumberWithUnits{1.5, "km"});
-    double result = 1.5; 
+    c = a + b;
+    CHECK_EQ(c , NumberWithUnits{2.5, "km"});
+    double result = 2.5; 
     for(int i = 0; i < 100; i++){
       double r = (rand()+1) * 100;
       result = result + r;
