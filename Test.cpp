@@ -20,11 +20,7 @@ using namespace std;
 
 
 ifstream units_file{"units.txt"};
-NumberWithUnits a{2, "km"};
-NumberWithUnits b{500, "m"};
-NumberWithUnits c;
-NumberWithUnits d{500, "ILS"};
-NumberWithUnits e{500, "sec"};
+
 
 
 /**
@@ -32,7 +28,11 @@ NumberWithUnits e{500, "sec"};
  */
 TEST_CASE("test for the operator -"){
     NumberWithUnits::read_units(units_file);
-
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};
     c = a - b;
     CHECK_EQ(c , NumberWithUnits{1.5, "km"});
     double result = 1.5; 
@@ -54,7 +54,11 @@ TEST_CASE("test for the operator -"){
  */
 TEST_CASE("test for the operator +"){
     NumberWithUnits::read_units(units_file);
-
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};
     c = a + b;
     CHECK_EQ(c , NumberWithUnits{2.5, "km"});
     double result = 2.5; 
@@ -76,7 +80,11 @@ TEST_CASE("test for the operator +"){
  */
 TEST_CASE("test for the operator *"){
     NumberWithUnits::read_units(units_file);
-
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};
     c = a * b;
     CHECK_EQ(c , NumberWithUnits{1, "km"});
     double result = 1; 
@@ -98,7 +106,11 @@ TEST_CASE("test for the operator *"){
  */
 TEST_CASE("test for the operator /"){
     NumberWithUnits::read_units(units_file);
-
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};
     c = a / b;
     CHECK_EQ(c , NumberWithUnits{4, "km"});
     double result = 4; 
@@ -120,7 +132,11 @@ TEST_CASE("test for the operator /"){
  */
 TEST_CASE("test for the operator +="){
     NumberWithUnits::read_units(units_file);
-    c = a - b;
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    c = a - b;
     CHECK_EQ(c , NumberWithUnits{1.5, "km"});
     double result = 1.5; 
     for(int i = 0; i < 100; i++){
@@ -139,7 +155,11 @@ TEST_CASE("test for the operator +="){
  */
 TEST_CASE("test for the operator -="){
     NumberWithUnits::read_units(units_file);
-    c = a - b;
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    c = a - b;
     CHECK_EQ(c , NumberWithUnits{1.5, "km"});
     double result = 1.5; 
     for(int i = 0; i < 100; i++){
@@ -158,7 +178,11 @@ TEST_CASE("test for the operator -="){
  */
 TEST_CASE("test for the operator *="){
     NumberWithUnits::read_units(units_file);
-    c = a - b;
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    c = a - b;
     CHECK_EQ(c , NumberWithUnits{1.5, "km"});
     double result = 1.5; 
     for(int i = 0; i < 100; i++){
@@ -177,7 +201,11 @@ TEST_CASE("test for the operator *="){
  */
 TEST_CASE("test for the operator /="){
     NumberWithUnits::read_units(units_file);
-    c = a - b;
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    c = a - b;
     CHECK_EQ(c , NumberWithUnits{1.5, "km"});
     double result = 1.5; 
     for(int i = 0; i < 100; i++){
@@ -196,7 +224,11 @@ TEST_CASE("test for the operator /="){
  */
 TEST_CASE("test for the operator =="){
     NumberWithUnits::read_units(units_file);
-    CHECK((a == b) == 0);
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK((a == b) == 0);
     CHECK((b == a) == 0);
     CHECK((b == b) == 1);
     CHECK((a == a) == 1);
@@ -209,7 +241,11 @@ TEST_CASE("test for the operator =="){
  */
 TEST_CASE("test for the operator !="){
     NumberWithUnits::read_units(units_file);
-    CHECK((a != b) == 1);
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK((a != b) == 1);
     CHECK((b != a) == 1);
     CHECK((b != b) == 0);
     CHECK((a != a) == 0);
@@ -222,7 +258,11 @@ TEST_CASE("test for the operator !="){
  */
 TEST_CASE("test for the operator <"){
     NumberWithUnits::read_units(units_file);
-    CHECK((a < b) == 0);
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK((a < b) == 0);
     CHECK((b < a) == 1);
     CHECK((b < b) == 0);
     CHECK((a < a) == 0);
@@ -237,7 +277,11 @@ TEST_CASE("test for the operator <"){
  */
 TEST_CASE("test for the operator >"){
     NumberWithUnits::read_units(units_file);
-    CHECK((a > b) == 1);
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK((a > b) == 1);
     CHECK((b > a) == 0);
     CHECK((b > b) == 0);
     CHECK((a > a) == 0);
@@ -252,7 +296,11 @@ TEST_CASE("test for the operator >"){
  */
 TEST_CASE("test for the operator >="){
     NumberWithUnits::read_units(units_file);
-    CHECK((a >= b) == 1);
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK((a >= b) == 1);
     CHECK((b >= a) == 0);
     CHECK((b >= b) == 1);
     CHECK((a >= a) == 1);
@@ -267,7 +315,11 @@ TEST_CASE("test for the operator >="){
  */
 TEST_CASE("test for the operator <="){
     NumberWithUnits::read_units(units_file);
-    CHECK((a <= b) == 0);
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK((a <= b) == 0);
     CHECK((b <= a) == 1);
     CHECK((b <= b) == 1);
     CHECK((a <= a) == 1);
@@ -282,7 +334,11 @@ TEST_CASE("test for the operator <="){
  */
 TEST_CASE("test for the operator ++"){
     NumberWithUnits::read_units(units_file);
-    CHECK_EQ( a++ , NumberWithUnits{2, "km"});
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    CHECK_EQ( a++ , NumberWithUnits{2, "km"});
     CHECK_EQ( a , NumberWithUnits{3, "km"});
     CHECK_EQ( ++a , NumberWithUnits{4, "km"});
     CHECK_EQ( a , NumberWithUnits{4, "km"});
@@ -293,10 +349,15 @@ TEST_CASE("test for the operator ++"){
  */
 TEST_CASE("test for the operator --"){
     NumberWithUnits::read_units(units_file);
-    CHECK_EQ( a-- , NumberWithUnits{4, "km"});
-    CHECK_EQ( a , NumberWithUnits{3, "km"});
-    CHECK_EQ( --a , NumberWithUnits{2, "km"});
-    CHECK_EQ( a , NumberWithUnits{2, "km"});
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
+    NumberWithUnits c;
+    NumberWithUnits d{500, "ILS"};
+    NumberWithUnits e{500, "sec"};    
+    CHECK_EQ( a-- , NumberWithUnits{2, "km"});
+    CHECK_EQ( a , NumberWithUnits{1, "km"});
+    CHECK_EQ( --a , NumberWithUnits{0, "km"});
+    CHECK_EQ( a , NumberWithUnits{0, "km"});
 }
 
 
@@ -305,7 +366,8 @@ TEST_CASE("test for the operator --"){
  */
 TEST_CASE("Test for the input/output"){
   NumberWithUnits::read_units(units_file);
-
+    NumberWithUnits a{2, "km"};
+    NumberWithUnits b{500, "m"};
   //cin
   istringstream input1 {"7000 [ kg ]"};
   istringstream input2 {"10000 [ kg ]"};
